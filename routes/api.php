@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\edu_details_Controller;
-use App\Http\Controllers\emp_details_Controller;
-use App\Http\Controllers\exp_details_Controller;
+use App\Http\Controllers\EducationDetailsController;
+use App\Http\Controllers\EmployeesDetailsController;
+use App\Http\Controllers\ExperienceDetailsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -20,22 +20,22 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     //education_details
-    Route::get('/education', [edu_details_Controller::class, 'index']);
-    Route::get('/education/{id}', [edu_details_Controller::class, 'show']);
-    Route::post('/education/{id}', [edu_details_Controller::class, 'store']);
-    Route::post('/education/{id}', [edu_details_Controller::class, 'update']);
+    Route::get('/education', [EducationDetailsController::class, 'index']);
+    Route::get('/education/{id}', [EducationDetailsController::class, 'show']);
+    Route::post('/education/{id}', [EducationDetailsController::class, 'store']);
+    Route::post('/education/{id}', [EducationDetailsController::class, 'update']);
 
     //employeed Details
-    Route::get('/employees', [emp_details_Controller::class, 'index']);
-    Route::get('/employees/{id}', [emp_details_Controller::class, 'show']);
-    Route::post('/employees/{id}', [emp_details_Controller::class, 'store']);
-    Route::post('/employees/{id}', [emp_details_Controller::class, 'update']);
+    Route::get('/employees', [EmployeesDetailsController::class, 'index']);
+    Route::get('/employees/{id}', [EmployeesDetailsController::class, 'show']);
+    Route::post('/employees/{id}', [EmployeesDetailsController::class, 'store']);
+    Route::post('/employees/{id}', [EmployeesDetailsController::class, 'update']);
 
     //Experience Details
-    Route::get('/experience', [exp_details_Controller::class, 'index']);
-    Route::get('/experience/{id}', [exp_details_Controller::class, 'show']);
-    Route::post('/experience/{id}', [exp_details_Controller::class, 'store']);
-    Route::post('/experience/{id}', [exp_details_Controller::class, 'update']);
+    Route::get('/experience', [ExperienceDetailsController::class, 'index']);
+    Route::get('/experience/{id}', [ExperienceDetailsController::class, 'show']);
+    Route::post('/experience/{id}', [ExperienceDetailsController::class, 'store']);
+    Route::post('/experience/{id}', [ExperienceDetailsController::class, 'update']);
 
 });
 

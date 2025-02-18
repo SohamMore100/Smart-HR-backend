@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\emp_details;
 
-class emp_details_controller extends Controller
+class EmployeesDetailsController extends Controller
 {
     public function store(Request $request)
     {

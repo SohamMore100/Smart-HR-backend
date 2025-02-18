@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage; 
 use App\Models\exp_details;
 
-class exp_details_controller extends Controller
+class ExperienceDetailsController extends Controller
 {
     public function store(Request $request)
     {

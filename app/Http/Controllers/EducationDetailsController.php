@@ -8,7 +8,7 @@ use App\Models\edu_details;
 use App\Http\Requests\EducationDetailRequest;  // Corrected the import statement
 use Illuminate\Support\Facades\Storage;
 
-class edu_details_Controller extends Controller
+class EducationDetailsController extends Controller
 {
     public function store(EducationDetailRequest $request)
     {
