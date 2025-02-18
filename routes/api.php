@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\edu_details_Controller;
+use App\Http\Controllers\emp_details_Controller;
+use App\Http\Controllers\exp_details_Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -11,6 +13,12 @@ Route::get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     
+    //user
+    Route::get('/users/{id}', [AuthController::class, 'show']);
+    Route::post('/users', [AuthController::class, 'update']);
+    Route::get('/users', [AuthController::class, 'index']);
+
+
     //education_details
     Route::get('/education', [edu_details_Controller::class, 'index']);
     Route::get('/education/{id}', [edu_details_Controller::class, 'show']);
