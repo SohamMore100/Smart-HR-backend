@@ -17,8 +17,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/education/{id}', [edu_details_Controller::class, 'store']);
     Route::post('/education/{id}', [edu_details_Controller::class, 'update']);
 
-
     //employeed Details
+    Route::get('/employees', [emp_details_Controller::class, 'index']);
+    Route::get('/employees/{id}', [emp_details_Controller::class, 'show']);
+    Route::post('/employees/{id}', [emp_details_Controller::class, 'store']);
+    Route::post('/employees/{id}', [emp_details_Controller::class, 'update']);
+
+    //Experience Details
+    Route::get('/experience', [exp_details_Controller::class, 'index']);
+    Route::get('/experience/{id}', [exp_details_Controller::class, 'show']);
+    Route::post('/experience/{id}', [exp_details_Controller::class, 'store']);
+    Route::post('/experience/{id}', [exp_details_Controller::class, 'update']);
 
 });
 
