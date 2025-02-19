@@ -22,20 +22,20 @@ Route::middleware('auth:sanctum')->group(function () {
     //education_details
     Route::get('/education', [EducationDetailsController::class, 'index']);
     Route::get('/education/{id}', [EducationDetailsController::class, 'show']);
-    Route::post('/education/{id}', [EducationDetailsController::class, 'store']);
-    Route::post('/education/{id}', [EducationDetailsController::class, 'update']);
+    Route::post('/education/add/{id}', [EducationDetailsController::class, 'store']);
+    Route::post('/education/edit/{id}', [EducationDetailsController::class, 'update']);
 
     //employeed Details
     Route::get('/employees', [EmployeesDetailsController::class, 'index']);
     Route::get('/employees/{id}', [EmployeesDetailsController::class, 'show']);
-    Route::post('/employees/{id}', [EmployeesDetailsController::class, 'store']);
-    Route::post('/employees/{id}', [EmployeesDetailsController::class, 'update']);
+    Route::post('/employees/add/{id}', [EmployeesDetailsController::class, 'store']);
+    Route::post('/employees/edit/{id}', [EmployeesDetailsController::class, 'update']);
 
     //Experience Details
     Route::get('/experience', [ExperienceDetailsController::class, 'index']);
     Route::get('/experience/{id}', [ExperienceDetailsController::class, 'show']);
-    Route::post('/experience/{id}', [ExperienceDetailsController::class, 'store']);
-    Route::post('/experience/{id}', [ExperienceDetailsController::class, 'update']);
+    Route::post('/experience/add/{id}', [ExperienceDetailsController::class, 'store']);
+    Route::post('/experience/edit/{id}', [ExperienceDetailsController::class, 'update']);
 
 });
 
