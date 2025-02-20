@@ -6,14 +6,25 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\emp_details;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
 class EmployeesDetailsController extends Controller
 {
     public function store(Request $request)
     {
+        $token = request()->header('employee');
+        if (!$token) {
+                return response()->json(['message' => 'Unauthorized: No token provided'], 401);
+            }
+
+        $token = str_replace('Bearer ', '', $token);
+        $user = User::where('token', $token)->first();
+        if (!$user) {
+                return response()->json(['message' => 'Unauthorized: Invalid token'], 401);
+            }
+        
         // Validate the request data
         $request->validate([
-                'user_id' => 'nullable|integer',
                 'reporting_manager_id' => 'nullable|integer',
                 'aadhar' => 'nullable|string|max:20',
                 'pan' => 'nullable|string|max:10',
@@ -34,10 +45,10 @@ class EmployeesDetailsController extends Controller
         if ($request->hasFile('photo')) {
                 $photoPath = $request->file('photo')->store('emp_photo');
         }
-
+        Log::info($user->id);
         // Create and save employee details
         $empDetails = emp_details::create([
-                'user_id' => $request->user_id,
+                'user_id' => $user->id,
                 'reporting_manager_id' => $request->reporting_manager_id,
                 'aadhar' => $request->aadhar,
                 'pan' => $request->pan,
@@ -62,7 +73,7 @@ class EmployeesDetailsController extends Controller
     public function update(Request $request, $id)
     {
         // Find the existing record
-        $empDetails = EmpDetails::find($id);
+        $empDetails = emp_details::find($id);
 
         if (!$empDetails) {
                 return response()->json(['message' => 'Record not found'], 404);
@@ -70,7 +81,7 @@ class EmployeesDetailsController extends Controller
 
         // Validate the request data
         $request->validate([
-                'user_id' => 'nullable|integer',
+               
                 'reporting_manager_id' => 'nullable|integer',
                 'aadhar' => 'nullable|string|max:20',
                 'pan' => 'nullable|string|max:10',
@@ -94,7 +105,7 @@ class EmployeesDetailsController extends Controller
 
         // Update other fields
         $empDetails->update([
-                'user_id' => $request->user_id ?? $empDetails->user_id,
+                
                 'reporting_manager_id' => $request->reporting_manager_id ?? $empDetails->reporting_manager_id,
                 'aadhar' => $request->aadhar ?? $empDetails->aadhar,
                 'pan' => $request->pan ?? $empDetails->pan,
@@ -117,21 +128,27 @@ class EmployeesDetailsController extends Controller
 
     public function show($id)
     {
-        // Find employee details by ID
-        $empDetails = emp_details::find($id);
+        try {
+            // Find the user by ID
+            $emp_details = emp_details::findOrFail($id);
 
-        // If no details found, return a not found response
-        if (!$empDetails) {
-                return response()->json([
-                        'message' => 'Employee details not found'
-                ], 404);
+            $user = User::where("id",$emp_details->reporting_manager_id)->first();
+
+        
+            return response()->json([
+                'data' => $emp_details,
+                'reporting_manager_id' => $user->first_name,
+                'status' => true,
+                'error_message' => null
+            ], 200);
+        } catch (\Exception $e) {
+            // Return error response if user not found
+            return response()->json([
+                'data' => null,
+                'status' => false,
+                'error_message' => 'Emp not found'
+            ], 404);
         }
-
-        // Return the employee details
-        return response()->json([
-                'message' => 'Employee details fetched successfully',
-                'data' => $empDetails
-        ], 200);
     }
 
     public function index(Request $request)

@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-class EmpDetails extends Model
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+class emp_details extends Model
 {
     use HasFactory;
 

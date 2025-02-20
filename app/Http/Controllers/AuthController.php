@@ -36,7 +36,7 @@ class AuthController extends Controller
                 'role' => $validatedData['role'],
             ]);
 
-            $token = $user->createToken('token-name')->plainTextToken;
+            $token = $user->createToken('employee')->plainTextToken;
             $user->update(['token' => $token]);
 
             return response()->json([
@@ -44,7 +44,7 @@ class AuthController extends Controller
                 'message' => 'User registered successfully',
                 'user' => $user,
                 'token' => $token
-            ], 201);
+            ], 201)->header('employee', 'Bearer ' . $token);
 
         } catch (\Exception $e) {
             return response()->json([

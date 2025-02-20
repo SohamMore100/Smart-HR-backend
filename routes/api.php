@@ -25,7 +25,7 @@ Route::get('/users', [AuthController::class, 'index']);
 //education_details
 Route::get('/education', [EducationDetailsController::class, 'index']);
 Route::get('/education/{id}', [EducationDetailsController::class, 'show']);
-Route::post('/education/add/{id}', [EducationDetailsController::class, 'store']);
+Route::post('/education/add', [EducationDetailsController::class, 'store']);
 Route::post('/education/edit/{id}', [EducationDetailsController::class, 'update']);
 
 //employeed Details
@@ -37,7 +37,7 @@ Route::post('/employees/edit/{id}', [EmployeesDetailsController::class, 'update'
 //Experience Details
 Route::get('/experience', [ExperienceDetailsController::class, 'index']);
 Route::get('/experience/{id}', [ExperienceDetailsController::class, 'show']);
-Route::post('/experience/add/{id}', [ExperienceDetailsController::class, 'store']);
+Route::post('/experience/add', [ExperienceDetailsController::class, 'store']);
 Route::post('/experience/edit/{id}', [ExperienceDetailsController::class, 'update']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

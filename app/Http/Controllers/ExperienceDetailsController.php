@@ -6,14 +6,26 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage; 
 use App\Models\exp_details;
+use App\Models\User;
 
 class ExperienceDetailsController extends Controller
 {
     public function store(Request $request)
     {
+
+        $token = request()->header('employee');
+        if (!$token) {
+                return response()->json(['message' => 'Unauthorized: No token provided'], 401);
+            }
+
+        $token = str_replace('Bearer ', '', $token);
+        $user = User::where('token', $token)->first();
+        if (!$user) {
+                return response()->json(['message' => 'Unauthorized: Invalid token'], 401);
+            }
         // Validate the request data
         $request->validate([
-                'user_id' => 'nullable|integer',
+               
                 'last_company' => 'nullable|string|max:255',
                 'exp_start_date' => 'nullable|date',
                 'exp_end_date' => 'nullable|date',
@@ -22,12 +34,12 @@ class ExperienceDetailsController extends Controller
                 'current_exp' => 'nullable|numeric',
                 'current_salary' => 'nullable|numeric',
                 'total_exp' => 'nullable|numeric',
-                'payslip1' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
-                'payslip2' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
-                'payslip3' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
-                'offer_letter' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
-                'exp_letter' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
-                'inc_letter' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
+                'payslip1' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:5000',
+                'payslip2' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:5000',
+                'payslip3' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:5000',
+                'offer_letter' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:5000',
+                'exp_letter' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:5000',
+                'inc_letter' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:5000',
                 'UAN' => 'nullable|string|max:20',
         ]);
 
@@ -69,7 +81,7 @@ class ExperienceDetailsController extends Controller
     public function update(Request $request, $id)
     {
         // Find the existing record
-        $expDetails = ExpDetails::find($id);
+        $expDetails = exp_details::find($id);
 
         if (!$expDetails) {
                 return response()->json(['message' => 'Record not found'], 404);
