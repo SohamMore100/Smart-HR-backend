@@ -81,8 +81,8 @@ class ExperienceDetailsController extends Controller
     public function update(Request $request, $id)
     {
         // Find the existing record
-        $expDetails = exp_details::find($id);
-
+        
+        $expDetails = exp_details::where("user_id", $id)->first();
         if (!$expDetails) {
                 return response()->json(['message' => 'Record not found'], 404);
         }
@@ -98,13 +98,13 @@ class ExperienceDetailsController extends Controller
                 'current_exp' => 'nullable|numeric',
                 'current_salary' => 'nullable|numeric',
                 'total_exp' => 'nullable|numeric',
-                'payslip1' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
-                'payslip2' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
-                'payslip3' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
-                'offer_letter' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
-                'exp_letter' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
-                'inc_letter' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
-                'UAN' => 'nullable|string|max:20',
+                // 'payslip1' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
+                // 'payslip2' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
+                // 'payslip3' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
+                // 'offer_letter' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
+                // 'exp_letter' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
+                // 'inc_letter' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
+                // 'UAN' => 'nullable|string|max:20',
         ]);
 
         // Handle file updates (delete old files and store new ones)
@@ -137,7 +137,7 @@ class ExperienceDetailsController extends Controller
 
         // Update the rest of the fields
         $expDetails->update([
-                'user_id' => $request->user_id ?? $expDetails->user_id,
+                
                 'last_company' => $request->last_company ?? $expDetails->last_company,
                 'exp_start_date' => $request->exp_start_date ?? $expDetails->exp_start_date,
                 'exp_end_date' => $request->exp_end_date ?? $expDetails->exp_end_date,
@@ -146,7 +146,7 @@ class ExperienceDetailsController extends Controller
                 'current_exp' => $request->current_exp ?? $expDetails->current_exp,
                 'current_salary' => $request->current_salary ?? $expDetails->current_salary,
                 'total_exp' => $request->total_exp ?? $expDetails->total_exp,
-                'UAN' => $request->UAN ?? $expDetails->UAN,
+                'UAN' => $request->UAN,
         ]);
 
         return response()->json([
@@ -158,7 +158,7 @@ class ExperienceDetailsController extends Controller
     public function show($id)
     {
         // Find experience details by employee ID
-        $expDetails = exp_details::where('user_id', $id)->first();
+      try { $expDetails = exp_details::where('user_id', $id)->first();
 
         // If no experience details found, return a not found response
         if (!$expDetails) {
@@ -169,9 +169,18 @@ class ExperienceDetailsController extends Controller
 
         // Return the experience details
         return response()->json([
-                'message' => 'Experience details fetched successfully',
-                'data' => $expDetails
-        ], 200);
+                'data' => $expDetails,
+                'status' => true,
+                'error_message' => null
+            ], 200);
+        } catch (\Exception $e) {
+            // Return error response if user not found
+            return response()->json([
+                'data' => null,
+                'status' => false,
+                'error_message' => 'employee not found'
+            ], 404);
+        }
     }
 
     public function index(Request $request)
