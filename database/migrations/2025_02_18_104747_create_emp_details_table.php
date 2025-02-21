@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('emp_details', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable();
+            $table->integer('user_id')->nullable()->unique();
             $table->integer('reporting_manager_id')->nullable();
             $table->string('aadhar')->nullable();
             $table->string('pan')->nullable();
@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('country')->nullable();
             $table->string('pin_code')->nullable();
+            $table->bigInteger('photo_id')->nullable()->unique();
+            $table->string('photo_name')->nullable();
             $table->string('photo')->nullable();
             $table->timestamps();
             $table->softDeletes();

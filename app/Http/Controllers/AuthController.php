@@ -13,6 +13,50 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     // User Registration
+    // public function register(Request $request)
+    // {
+    //     try {
+    //         $validatedData = $request->validate([
+    //             'first_name' => 'required|string|max:255',
+    //             'middle_name' => 'required|string|max:255',
+    //             'last_name' => 'required|string|max:255',
+    //             'email' => 'required|string|email|max:255|unique:users',
+    //             'password' => 'required|string|min:6',
+    //             'role' => 'required|integer|min:1',
+    //             'mobile' => 'required|digits:10'
+    //         ]);
+
+    //         $user = User::create([
+    //             'first_name' => $validatedData['first_name'],
+    //             'middle_name' => $validatedData['middle_name'],
+    //             'last_name' => $validatedData['last_name'],
+    //             'email' => $validatedData['email'],
+    //             'password' => Hash::make($validatedData['password']),
+    //             'mobile' => $validatedData['mobile'],
+    //             'role' => $validatedData['role'],
+    //         ]);
+
+    //         $token = $user->createToken('employee')->plainTextToken;
+    //         $user->update(['token' => $token]);
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'User registered successfully',
+    //             'user' => $user,
+    //             'token' => $token
+    //         ], 201)->header('employee', 'Bearer ' . $token);
+
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Something went wrong',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
+
+    
     public function register(Request $request)
     {
         try {
@@ -26,7 +70,22 @@ class AuthController extends Controller
                 'mobile' => 'required|digits:10'
             ]);
 
+            // Ensure employee_id is generated and assigned
+           
+         
+
+            $lastEmployee = User::orderBy('id', 'desc')->first();
+
+            if ($lastEmployee && isset($lastEmployee->employee_id)) {
+                // Extract numeric part and increment
+                $lastIdNumber = intval(substr($lastEmployee->employee_id, 1)); 
+                $newEmployeeId = 'A' . ($lastIdNumber + 1);
+            } else {
+                // If table is empty, start from A1001
+                $newEmployeeId = 'A1001';
+            }
             $user = User::create([
+                'employee_id' => $newEmployeeId, 
                 'first_name' => $validatedData['first_name'],
                 'middle_name' => $validatedData['middle_name'],
                 'last_name' => $validatedData['last_name'],
@@ -42,6 +101,7 @@ class AuthController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'User registered successfully',
+                'employee_id' => $newEmployeeId,
                 'user' => $user,
                 'token' => $token
             ], 201)->header('employee', 'Bearer ' . $token);
@@ -55,9 +115,7 @@ class AuthController extends Controller
         }
     }
 
-
     
-
     public function login(Request $request)
     {
         $request->validate([

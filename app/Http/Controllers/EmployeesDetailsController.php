@@ -43,11 +43,23 @@ class EmployeesDetailsController extends Controller
         ]);
 
         // Handle file upload (store in storage/app/emp_photo)
-        $photoPath = null;
+        // $photoPath = null;
+        // if ($request->hasFile('photo')) {
+        //         $photoPath = $request->file('photo')->store('emp_photo');
+        // }
+        
+
+        // Handle file upload
+        // $photoPath = null;
+        // $photoName = null;
+        // $photoId = null;
+
         if ($request->hasFile('photo')) {
-                $photoPath = $request->file('photo')->store('emp_photo');
+            $photoId = uniqid('photo_'); // Generate unique photo ID
+            $photoName = $photoId . '.' . $request->file('photo')->getClientOriginalExtension(); // Generate file name
+            $photoPath = $request->file('photo')->storeAs('emp_photo', $photoName); // Store file in 'storage/app/emp_photo'
         }
-        Log::info($user->id);
+
         // Create and save employee details
         $empDetails = emp_details::create([
                 'user_id' => $user->id,
@@ -63,6 +75,8 @@ class EmployeesDetailsController extends Controller
                 'state' => $request->state,
                 'country' => $request->country,
                 'pin_code' => $request->pin_code,
+                'photo_id' => $photoId,
+                'photo_name' => $photoName,
                 'photo' => $photoPath, // Store the path in the database
         ]);
 

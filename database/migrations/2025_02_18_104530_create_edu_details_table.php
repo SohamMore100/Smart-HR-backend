@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('edu_details', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable();
+            $table->integer('user_id')->nullable()->unique();
             $table->string('ssc_schoole')->nullable();
             $table->decimal('ssc_per', 5, 2)->nullable();
             $table->year('ssc_passout_year')->nullable();
@@ -33,10 +33,20 @@ return new class extends Migration
             $table->year('pg_start_year')->nullable();
             $table->year('pg_passout_year')->nullable();
             $table->string('pg_university')->nullable();
+            $table->bigInteger('ssc_id')->nullable()->unique();
+            $table->string('ssc_name')->nullable();
             $table->string('doc_ssc')->nullable();
+            $table->bigInteger('hsc_id')->nullable()->unique();
+            $table->string('hsc_name')->nullable();
             $table->string('doc_hsc')->nullable();
+            $table->bigInteger('graduation_id')->nullable()->unique();
+            $table->string('graduation_name')->nullable();
             $table->string('doc_graduation')->nullable();
+            $table->string('graduation_course')->nullable();
+            $table->bigInteger('pg_id')->nullable()->unique();
+            $table->string('pg_name')->nullable();
             $table->string('doc_pg')->nullable();
+            $table->string('pg_course')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

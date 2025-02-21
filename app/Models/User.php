@@ -27,6 +27,7 @@ class User extends Authenticatable
         'token',
         'role',
         'mobile',
+        'employee_id',
     ];
 
     /**
