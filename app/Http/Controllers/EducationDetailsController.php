@@ -69,7 +69,8 @@ class EducationDetailsController extends Controller
 
     public function update(EducationDetailRequest $request, $id)
     {
-        $educationDetail = edu_details::findOrFail($id);
+        
+        $educationDetail = edu_details::where("user_id", $id)->first();
         $educationDetail->update($request->except(['doc_ssc', 'doc_hsc', 'doc_graduation', 'doc_pg']));
 
         // File handling loop (same as before)
@@ -88,10 +89,23 @@ class EducationDetailsController extends Controller
     public function show($id)
     {
         // Retrieve the education details by ID
-        $educationDetail = edu_details::findOrFail($id);
+       
+        try {$educationDetail = edu_details::where("user_id", $id)->first();
 
         // Return the education details in the response
-        return response()->json(['data' => $educationDetail], 200);
+            return response()->json([
+                'data' => $educationDetail,
+                'status' => true,
+                'error_message' => null
+            ], 200);
+        } catch (\Exception $e) {
+            // Return error response if user not found
+            return response()->json([
+                'data' => null,
+                'status' => false,
+                'error_message' => 'employee not found'
+            ], 404);
+        }
     }
 
 

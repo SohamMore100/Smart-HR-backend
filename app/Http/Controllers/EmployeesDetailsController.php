@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\edu_details;
+use App\Models\exp_details;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\emp_details;
@@ -37,7 +39,7 @@ class EmployeesDetailsController extends Controller
                 'state' => 'nullable|string|max:100',
                 'country' => 'nullable|string|max:100',
                 'pin_code' => 'nullable|string|max:10',
-                'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validating image upload
+                'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:5000', // Validating image upload
         ]);
 
         // Handle file upload (store in storage/app/emp_photo)
@@ -64,17 +66,26 @@ class EmployeesDetailsController extends Controller
                 'photo' => $photoPath, // Store the path in the database
         ]);
 
+        $eduDetails = edu_details::create([
+            'user_id' => $user->id,
+        ]);
+        $expDetails = exp_details::create([
+            'user_id' => $user->id,
+        ]);
+
+        
+
         return response()->json([
                 'message' => 'Employee details saved successfully',
-                'data' => $empDetails
+                'data' => [$empDetails, $eduDetails, $expDetails]
         ], 201);
     }
 
     public function update(Request $request, $id)
     {
         // Find the existing record
-        $empDetails = emp_details::find($id);
-
+        
+        $empDetails = emp_details::where("user_id", $id)->first();
         if (!$empDetails) {
                 return response()->json(['message' => 'Record not found'], 404);
         }
@@ -94,7 +105,7 @@ class EmployeesDetailsController extends Controller
                 'state' => 'nullable|string|max:100',
                 'country' => 'nullable|string|max:100',
                 'pin_code' => 'nullable|string|max:10',
-                'photo' => 'nullable|file|mimes:jpeg,png,jpg|max:2048',
+                // 'photo' => 'nullable|file|mimes:jpeg,png,jpg|max:5000',
         ]);
 
         // Handle photo update (delete old photo if new one is uploaded)
@@ -130,7 +141,8 @@ class EmployeesDetailsController extends Controller
     {
         try {
             // Find the user by ID
-            $emp_details = emp_details::findOrFail($id);
+        //     $emp_details = emp_details::findOrFail($id);
+        $emp_details = emp_details::where("user_id", $id)->first();
 
             $user = User::where("id",$emp_details->reporting_manager_id)->first();
 

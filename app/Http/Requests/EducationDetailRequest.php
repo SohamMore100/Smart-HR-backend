@@ -42,9 +42,9 @@ class EducationDetailRequest extends FormRequest
             // 'pg_start_year' => 'nullable|integer',
             // 'pg_passout_year' => 'nullable|integer',
             'pg_university' => 'nullable|string',
-            'doc_ssc' => 'nullable|file|mimes:pdf,jpeg,jpg,png|max:5000',
-            'doc_hsc' => 'nullable|file|mimes:pdf,jpeg,jpg,png|max:5000',
-            'doc_graduation' => 'nullable|file|mimes:pdf,jpeg,jpg,png|max:5000',
+            // 'doc_ssc' => 'nullable|file|mimes:pdf,jpeg,jpg,png|max:5000',
+            // 'doc_hsc' => 'nullable|file|mimes:pdf,jpeg,jpg,png|max:5000',
+            // 'doc_graduation' => 'nullable|file|mimes:pdf,jpeg,jpg,png|max:5000',
             // 'doc_pg' => 'nullable|file|mimes:pdf,jpeg,jpg,png|max:5000',
         ];
     }
